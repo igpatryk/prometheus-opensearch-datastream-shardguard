@@ -31,13 +31,14 @@ On each scrape, the exporter:
 
 1. Fetches cluster name:
    - `GET /_cluster/health`
-2. Fetches data streams and picks the latest backing index for each:
+2. Fetches data streams and determines the **latest backing index** for each:
    - `GET /_data_stream`
-3. Fetches store stats for indices:
-   - `GET /_stats/store`
-4. Fetches shard counts per index:
-   - `GET /_cat/indices?format=json&h=index,pri,rep`
-5. For each **latest backing index**:
+   - Builds a map: `backing_index_name -> data_stream_name`
+3. Fetches **store stats only for those backing indices**:
+   - `GET /<backing_index1>,<backing_index2>/_stats/store`
+4. Fetches **shard counts only for those backing indices**:
+   - `GET /_cat/indices/<backing_index1>,<backing_index2>?format=json&h=index,pri,rep`
+5. For each data stream’s latest backing index:
    - Calculates total primary store size
    - Divides by primary shard count → **average primary shard size**
    - Computes a recommended primary shard count using the configured target shard size
