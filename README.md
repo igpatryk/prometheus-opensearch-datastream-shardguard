@@ -1,6 +1,6 @@
-# OpenSearch Data Stream Shard Guard
+# Prometheus OpenSearch Data Stream Shard Guard
 
-`opensearch-datastream-shardguard` is a Prometheus exporter that inspects **OpenSearch data streams** and checks whether the **latest backing index** (write index) has a reasonable shard sizing.
+`prometheus-opensearch-datastream-shardguard` is a Prometheus exporter that inspects **OpenSearch data streams** and checks whether the **latest backing index** (write index) has a reasonable shard sizing.
 
 It calculates:
 
@@ -77,12 +77,12 @@ curl -X POST "http://localhost:9200/logs-web/_bulk" \
 ```
 3. Run the exporter locally
 ```bash
-docker build -t opensearch-datastream-shardguard:dev .
+docker build -t prometheus-opensearch-datastream-shardguard:dev .
 docker run --rm -p 9108:9108 \
   -e OPENSEARCH_URL="http://host.docker.internal:9200" \
   -e TARGET_SHARD_SIZE_GB="1" \
   -e LISTEN_ADDR=":9108" \
-  opensearch-datastream-shardguard:dev
+  prometheus-opensearch-datastream-shardguard:dev
 ```
 4. Check metrics
 ```bash
@@ -112,7 +112,7 @@ Exported metrics:
 - `opensearch_datastream_recommended_primary_shards`  
   Recommended number of primary shards based on the configured target shard size.
 
- `opensearch_datastream_shard_size_ok`  
+- `opensearch_datastream_shard_size_ok`  
   `1` if `avg_primary_shard_size` is **less than or equal to the configured target shard size**, otherwise `0`.
 
 ### Example PromQL
